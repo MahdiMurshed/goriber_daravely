@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           title: 'MyShop',
           theme: ThemeData(
             primarySwatch: Colors.green,
-            accentColor: Colors.greenAccent,
+            accentColor: Colors.cyan,
             fontFamily: 'Lato',
           ),
           home: ProductsOverViewScreen(),
