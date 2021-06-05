@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/screen/cart_screen.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 
@@ -24,12 +25,12 @@ class _ProductsOverViewScreenState extends State<ProductsOverViewScreen> {
               onSelected: (FilterOption slv) {
                 if (slv == FilterOption.Favorite) {
                   setState(() {
-                                      showFav = true;
-                                    });
+                    showFav = true;
+                  });
                 } else {
                   setState(() {
-                                      showFav = false;
-                                    });
+                    showFav = false;
+                  });
                 }
               },
               icon: Icon(Icons.more_vert),
@@ -43,16 +44,18 @@ class _ProductsOverViewScreenState extends State<ProductsOverViewScreen> {
                       value: FilterOption.All,
                     ),
                   ]),
-                  Consumer<Cart>(
-                    builder: (_,cartData,ch)=> Badge(
-                      child: ch,
-                      value: cartData.itemCount.toString(),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.shopping_cart),
-                      onPressed: (){},
-                      ),
-                  )
+          Consumer<Cart>(
+            builder: (_, cartData, ch) => Badge(
+              child: ch,
+              value: cartData.itemCount.toString(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            ),
+          )
         ],
       ),
       body: ProductGrid(showFav),
