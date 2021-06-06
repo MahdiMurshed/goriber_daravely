@@ -30,8 +30,13 @@ class Cart with ChangeNotifier {
 
   void addItem(String id, double price, String title) {
     if (_items.containsKey(id)) {
-      _items.update(id, (value) => CartItem(id: value.id,title: value.title,price: value.price,quantity: value.quantity + 1));
-      
+      _items.update(
+          id,
+          (value) => CartItem(
+              id: value.id,
+              title: value.title,
+              price: value.price,
+              quantity: value.quantity + 1));
     } else {
       _items.putIfAbsent(
           id,
@@ -41,6 +46,11 @@ class Cart with ChangeNotifier {
               price: price,
               quantity: 1));
     }
+    notifyListeners();
+  }
+
+  void removeItem(String id) {
+    _items.remove(id);
     notifyListeners();
   }
 }
