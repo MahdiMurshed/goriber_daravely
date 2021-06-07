@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/order.dart';
 import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/screen/cart_screen.dart';
+import 'package:shop_app/screen/orders_screen.dart';
 import 'package:shop_app/screen/product_detail_screen.dart';
 import 'screen/products_overview_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
             create: (context) => Products(),
           ),
           ChangeNotifierProvider(create: (context) => Cart()),
+          ChangeNotifierProvider(create: (context)=>Order())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -29,7 +32,8 @@ class MyApp extends StatelessWidget {
           home: ProductsOverViewScreen(),
           routes: {
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-            CartScreen.routeName:(ctx)=>CartScreen()
+            CartScreen.routeName:(ctx)=>CartScreen(),
+            OrderScreen.routeName:(ctx)=>OrderScreen()
           },
         ));
   }
