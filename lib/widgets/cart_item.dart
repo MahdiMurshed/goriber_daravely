@@ -8,7 +8,7 @@ class CartProduct extends StatelessWidget {
   final String productId;
   final int quantity;
   final String title;
-  CartProduct({this.id,this.productId, this.price, this.quantity, this.title});
+  CartProduct({this.id, this.productId, this.price, this.quantity, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,25 @@ class CartProduct extends StatelessWidget {
         padding: EdgeInsets.only(right: 20),
       ),
       direction: DismissDirection.endToStart,
+      //2. coonfirm dismiss
+      confirmDismiss: (d) {
+        return showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text('Are you sure ?'),
+                  content: Text('Do you want to remove the item from cart'),
+                  actions: [
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop(false);
+                        },
+                        child: Text('No')),
+                    FlatButton(onPressed: () {
+                      Navigator.of(ctx).pop(true);
+                    }, child: Text('Yes'))
+                  ],
+                ));
+      },
       onDismissed: (d) {
         cart.removeItem(productId);
       },
