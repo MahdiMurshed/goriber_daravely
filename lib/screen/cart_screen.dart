@@ -4,11 +4,20 @@ import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/order.dart';
 import '../widgets/cart_item.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  
+  
+
   @override
   Widget build(BuildContext context) {
-    final order = Provider.of<Order>(context);
+    final order = Provider.of<Order>(context, listen: false);
     final cart = Provider.of<Cart>(context);
     print(cart.totalAmount);
     return Scaffold(
@@ -33,15 +42,7 @@ class CartScreen extends StatelessWidget {
                     label: Text(cart.totalAmount.toString()),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      order.addOrder(
-                          cart.items.values.toList(), cart.totalAmount);
-                      cart.clear();
-                    },
-                    child: Text('Order'),
-                    color: Theme.of(context).primaryColor,
-                  )
+                  OrderButton(cart: cart, order: order)
                 ],
               ),
             ),
@@ -61,6 +62,44 @@ class CartScreen extends StatelessWidget {
                       )))
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+    @required this.order,
+  }) : super(key: key);
+
+  final Cart cart;
+  final Order order;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: (widget.cart.totalAmount <= 0 || isLoading)
+          ? null
+          : () async {
+              setState(() {
+                isLoading = true;
+              });
+              await widget.order.addOrder(
+                  widget.cart.items.values.toList(), widget.cart.totalAmount);
+              setState(() {
+                isLoading = false;
+              });
+              widget.cart.clear();
+            },
+      child: isLoading ? CircularProgressIndicator() : Text('Order'),
+      color: Theme.of(context).primaryColor,
     );
   }
 }
