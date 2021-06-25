@@ -77,6 +77,10 @@ class Products with ChangeNotifier {
       _items.insert(0, newproduct);
 
       notifyListeners();
+      //catching error
+    }).catchError((error) {
+      print(error);
+      throw error;
     });
     //return Future.value();
   }

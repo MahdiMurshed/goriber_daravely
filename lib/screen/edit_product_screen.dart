@@ -1,4 +1,4 @@
-//4.Form
+// //4.Form
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +32,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'imageUrl': '',
   };
 //6
-
+  var isinit = true;
+  var isLoading = false;
   @override
   void initState() {
     // TODO: add listener
@@ -41,8 +42,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.initState();
   }
 
-  var isinit = true;
-  var isLoading = false;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -63,6 +62,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
     isinit = false;
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: disposing
+    _imageurlFocus.removeListener(_updateimageUrl);
+    _priceFocusNode.dispose();
+    _descFocusNode.dispose();
+    _imageUrlController.dispose();
+    _imageurlFocus.dispose();
+    super.dispose();
   }
 
   void _updateimageUrl() {
@@ -99,34 +109,34 @@ class _EditProductScreenState extends State<EditProductScreen> {
       print(isLoading);
       //not working
       Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .then((_) {
-        
+          .addProduct(_editedProduct)//catching error
+          .catchError((error) {
+        return showDialog<Null>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text('Error occured'),
+                  content: Text('Something went wrong'),
+                  actions: [
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                        },
+                        child: Text('Close'))
+                  ],
+                ));
+      }).then((_) {
         print(mounted);
-        if (mounted) {
-          setState(() {
-            print('set state of add $isLoading');
-            isLoading = false;
-            print('set state of add $isLoading');
-          });
-        }
+
+        setState(() {
+          print('set state of add $isLoading');
+          isLoading = false;
+          print('set state of add $isLoading');
+        });
 
         Navigator.of(context).pop();
       });
+      //Navigator.of(context).pop();
     }
-
-    Navigator.of(context).pop();
-  }
-
-  @override
-  void dispose() {
-    // TODO: disposing
-    _imageurlFocus.removeListener(_updateimageUrl);
-    _priceFocusNode.dispose();
-    _descFocusNode.dispose();
-    _imageUrlController.dispose();
-    _imageurlFocus.dispose();
-    super.dispose();
   }
 
   @override
